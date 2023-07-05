@@ -1,0 +1,183 @@
+//binary tree
+#include<iostream>
+#include<queue>
+using namespace std;
+
+class node {
+    public:
+        int data;
+        node* left;
+        node* right;
+
+//constructor call
+    node(int d) {
+            //this ptr int d wle d ko pt. 
+        this -> data = d;
+        this -> left = NULL;
+        this -> right = NULL;
+    }
+};
+
+//create root node
+node* buildTree(node* root) {
+
+    cout << "Enter the data: " << endl;
+    int data;
+    cin >> data;//data i/p kr diya
+    //root node comes as i/p of func buildtree
+    
+    root = new node(data);    
+
+    if(data == -1) {
+        return NULL;
+    }
+ //build tree by recursion upto root.right wle line tk
+    cout << "Enter data for inserting in left of " << data << endl;
+     //recusion se phle left ke call mare
+    root->left = buildTree(root->left);
+    
+    cout << "Enter data for inserting in right of " << data << endl;
+     //phir dusre right ke call mare
+    root->right = buildTree(root->right);
+    return root;//with whole data
+
+}
+
+void levelOrderTraversal(node* root) {
+     //queue banaye node* type ki
+    queue<node*> q;
+    q.push(root);//push root into 
+    q.push(NULL);//separator dal diya lvl 0 complete 
+
+    while(!q.empty()) {
+        node* temp = q.front();//is line ke upar temp.data print ni kiya 
+        //nhi q.push(null) se front null hota toh segmentation fault aata!!
+        q.pop();
+        //enter marne ki fight thi to complete lvl
+        if(temp == NULL) {  
+            //purana level complete traverse ho chuka hai
+            cout << endl;//enter mar diya
+            if(!q.empty()) {  //toh child nodes prsent h que me
+                //queue still has some child ndoes
+                q.push(NULL);//ek aur separator if child nodes present 
+            }  
+        }
+        else{
+            cout << temp -> data << " ";
+            if(temp ->left) {//non null h toh 
+                q.push(temp ->left);//push left wale child ko que me
+            }
+
+            if(temp ->right) {//non null h toh 
+                q.push(temp ->right);//push right wale child ko que me
+            }
+        }
+    }
+
+}
+
+
+
+void inorder(node* root){
+    //base case
+    if(root==NULL){
+        return ;//waps ajana
+    }
+    //root.left  ke liye inorder call
+    inorder(root->left);//left 
+    cout<<"root->data "<<endl;//node
+    inorder(root->right);//right
+    
+    
+}
+
+//preorder-> node->left->right
+void preorder(node* root){
+    //base case
+    if(root==NULL){
+        return ;//waps ajana
+    }
+  
+     cout<<"root->data "<<endl;//node
+    preorder(root->left);//left 
+    preorder(root->right);//right
+    
+    }
+
+
+void postorder(node* root){
+    //base case
+    if(root==NULL){
+        return ;//waps ajana
+    }
+  
+//postorder calls
+    postorder(root->left);//left 
+    postorder(root->right);//right
+    cout<<"root->data "<<" ";//node
+}
+
+void buildFromLevelOrder(node* &root) {
+    queue<node*> q;
+
+    cout << "Enter data for root" << endl;
+    int data ;
+    cin >> data;
+    root = new node(data);
+    
+    q.push(root);
+
+    while(!q.empty()) {
+        node* temp = q.front();
+        q.pop();
+
+        cout << "Enter left node for: " << temp->data << endl;
+        int leftData;
+        cin >> leftData;
+
+        if(leftData != -1) {
+            temp -> left = new node(leftData);
+            q.push(temp->left);
+        }
+
+        cout << "Enter right node for: " << temp->data << endl;
+        int rightData;
+        cin >> rightData;
+
+        if(rightData != -1) {
+            temp -> right = new node(rightData);
+            q.push(temp->right);
+        }
+    }
+ }
+
+
+int main() {
+
+    node* root = NULL;
+
+    buildFromLevelOrder(root);
+    levelOrderTraversal(root);
+    // 1 3 5 7 11 17 -1 -1 -1 -1 -1 -1 -1
+
+    /*
+    //creating a Tree
+    root = buildTree(root);
+    //1 3 7 -1 -1 11 -1 -1 5 17 -1 -1 -1 
+    //level order
+    cout << "Printing the level order tracersal output " << endl;
+    levelOrderTraversal(root);
+
+    cout << "inorder traversal is:  ";
+    inorder(root); 
+
+    cout << endl << "preorder traversal is:  ";
+    preorder(root); 
+
+    cout << endl << "postorder traversal is:  ";
+    postorder(root); 
+    */
+
+
+    return 0;
+}
